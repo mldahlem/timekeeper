@@ -163,7 +163,6 @@ def newTimeCount():
             sys.exit()
 
     projectName = listaProjetos[int(projeto)]
-    os.system('cls')
     print(f"\n  Você escolheu o projeto: {projectName}")
 
     opcao = '1'
