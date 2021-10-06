@@ -3,7 +3,8 @@ Programa para mensurar o tempo gasto em projetos.
 Marcelo Luis Dahlem
 """
 
-import time
+#import time
+from datetime import datetime
 import os
 import sys
 
@@ -21,6 +22,7 @@ XYZ,200.00
 Os demais arquivos serão criados automaticamente. Em outra versão irei
 automatizar o arquivo 'project_values.dat' também.
 """
+
 arq_projetos = "D:\\Apps\\DataFiles\\projects.dat"
 arq_tempos = "D:\\Apps\\DataFiles\\project_times.dat"
 arq_valores = "D:\\Apps\\DataFiles\\project_values.dat"
@@ -87,16 +89,16 @@ def addTempo(arq, projeto):
 
             :return null
     """
-    inicio = time.time()
-    print(f"\n  A contagem do tempo começou agora, exatamente às {time.ctime()}\n")
+    inicio = datetime.now()
+    print(f"\n  A contagem do tempo começou agora, exatamente às {inicio.strftime('%d/%m/%Y %H:%M')}\n")
     opcao = ''
     while opcao.lower() != 'fim':
         opcao = input("  Para encerrar a contagem, digite 'fim': ")
 
-    fim = time.time()
+    fim = datetime.now()
     tempo = fim - inicio
     f = open(arq, "a")
-    f.write(time.ctime() + ',' + projeto.strip('\n') + ',' + str(tempo) + ',' + 'segundos\n')
+    f.write(fim.strftime('%d/%m/%Y') + ',' + projeto.strip('\n') + ',' + str(tempo.total_seconds()) + ',' + 'segundos\n')
     f.close()
 
 
