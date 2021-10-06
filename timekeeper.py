@@ -88,7 +88,6 @@ def addTempo(arq, projeto):
             :return null
     """
     inicio = time.time()
-    os.system('cls')
     print(f"\n  A contagem do tempo começou agora, exatamente às {time.ctime()}\n")
     opcao = ''
     while opcao.lower() != 'fim':
@@ -163,6 +162,7 @@ def newTimeCount():
             sys.exit()
 
     projectName = listaProjetos[int(projeto)]
+    os.system('cls')
     print(f"\n  Você escolheu o projeto: {projectName}")
 
     opcao = '1'
