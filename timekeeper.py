@@ -3,7 +3,6 @@ Programa para mensurar o tempo gasto em projetos.
 Marcelo Luis Dahlem
 """
 
-#import time
 from datetime import datetime
 import os
 import sys
@@ -23,12 +22,12 @@ Os demais arquivos serão criados automaticamente. Em outra versão irei
 automatizar o arquivo 'project_values.dat' também.
 """
 
-arq_projetos = "D:\\Apps\\DataFiles\\projects.dat"
-arq_tempos = "D:\\Apps\\DataFiles\\project_times.dat"
-arq_valores = "D:\\Apps\\DataFiles\\project_values.dat"
+FILE_PROJECTS = "D:\\Apps\\DataFiles\\projects.dat"
+FILE_TIMES = "D:\\Apps\\DataFiles\\project_times.dat"
+FILE_VALUES = "D:\\Apps\\DataFiles\\project_values.dat"
 
 
-def menuInicial():
+def menu() -> str:
     """
         Função que chama o menu inicial e retorna a opção escolhida.
 
@@ -44,7 +43,7 @@ def menuInicial():
     return opcao
 
 
-def projectList(arq):
+def project_list(arq: str) -> list:
     """
         Gera uma lista com todos os nomes de projetos contidos no arquivo 'projects.dat'.
 
@@ -61,14 +60,14 @@ def projectList(arq):
     return projects
 
 
-def createProject(arq):
+def create_project(arq: str) -> None:
     """
             Solicita que o usuário digite um novo nome de projeto e
             adiciona-o no arquivo que contém a relação de projetos do usuário.
 
             :param arq: string -> nome do arquivo, está definido no início do programa
 
-            :return null
+            :return None
     """
     os.system('cls')
     print("\n  A opção escolhida foi para inclusão de um novo projeto \n")
@@ -76,9 +75,10 @@ def createProject(arq):
     f = open(arq, "a")
     f.write(nome + "\n")
     f.close()
+    return
 
 
-def addTempo(arq, projeto):
+def add_tempo(arq: str, projeto: str) -> None:
     """
             Inicia uma nova contagem de tempo para o projeto selecionado quando o usuário
             digita '0' e finaliza a contagem de tempo quando o usuário digita 'fim'.
@@ -87,7 +87,7 @@ def addTempo(arq, projeto):
             :param arq: string -> nome do arquivo, está definido no início do programa
             :param projeto: string
 
-            :return null
+            :return None
     """
     inicio = datetime.now()
     print(f"\n  A contagem do tempo começou agora, exatamente às {inicio.strftime('%d/%m/%Y %H:%M')}\n")
@@ -98,11 +98,13 @@ def addTempo(arq, projeto):
     fim = datetime.now()
     tempo = fim - inicio
     f = open(arq, "a")
-    f.write(fim.strftime('%d/%m/%Y') + ',' + projeto.strip('\n') + ',' + str(tempo.total_seconds()) + ',' + 'segundos\n')
+    f.write(fim.strftime('%d/%m/%Y') + ',' + projeto.strip('\n') + ',' +
+            str(tempo.total_seconds()) + ',' + 'segundos\n')
     f.close()
+    return
 
 
-def calculaTempo(arq, projeto):
+def calcula_tempo(arq: str, projeto: str) -> float:
     """
             Calcula o tempo total de um projeto selecionado a partir do arquivo de dados.
 
@@ -121,7 +123,7 @@ def calculaTempo(arq, projeto):
     return soma
 
 
-def calculaCusto(arq, projeto, horas):
+def calcula_custo(arq: str, projeto: str, horas: float) -> float:
     """
             Calcula o custo total de um projeto selecionado com base no parâmetro horas e com
             o custo de hora unitária definido no arquivo 'project_values.dat'.
@@ -130,7 +132,7 @@ def calculaCusto(arq, projeto, horas):
             :param projeto: string
             :param horas: float
 
-            :return float(valor) * horas
+            :return float(valor) * horas: float
     """
     f = open(arq, "r")
     linhas = f.readlines()
@@ -142,17 +144,17 @@ def calculaCusto(arq, projeto, horas):
     return float(valor) * horas
 
 
-def newTimeCount():
+def new_time_count() -> None:
     """
         Função utilizada apenas para organizar o código. Esta função é chamada quando o
         usuário escolhe a opção 2 no menu inicial.
     """
-    listaProjetos = projectList(arq_projetos)
+    lista_projetos = project_list(FILE_PROJECTS)
     os.system('cls')
     print("\n  Você escolheu definir um projeto já existente, favor digitar o número referente ao projeto escolhido\n")
     contador = 0
 
-    for linha in listaProjetos:
+    for linha in lista_projetos:
         print(f"  {contador}: {linha}")
         contador += 1
 
@@ -163,28 +165,29 @@ def newTimeCount():
         if projeto.lower() == 'x':
             sys.exit()
 
-    projectName = listaProjetos[int(projeto)]
+    project_name = lista_projetos[int(projeto)]
     os.system('cls')
-    print(f"\n  Você escolheu o projeto: {projectName}")
+    print(f"\n  Você escolheu o projeto: {project_name}")
 
     opcao = '1'
     while opcao != '0':
         opcao = input("\n  Para iniciar a contagem do tempo, digite 0: ")
 
-    addTempo(arq_tempos, projectName)
+    add_tempo(FILE_TIMES, project_name)
+    return
 
 
-def timeAndCostCalculation():
+def time_and_cost_calculation() -> None:
     """
         Função utilizada apenas para organizar o código. Esta função é chamada quando o
         usuário escolhe a opção 3 no menu inicial.
     """
-    listaProjetos = projectList(arq_projetos)
+    lista_projetos = project_list(FILE_PROJECTS)
     os.system('cls')
     print("\n  Você escolheu calcular o tempo total, favor digitar o número referente ao projeto escolhido\n")
     contador = 0
 
-    for linha in listaProjetos:
+    for linha in lista_projetos:
         print(f"  {contador}: {linha}")
         contador += 1
 
@@ -195,36 +198,39 @@ def timeAndCostCalculation():
         if projeto.lower() == 'x':
             sys.exit()
 
-    projectName = listaProjetos[int(projeto)]
-    horas = calculaTempo(arq_tempos, projectName) / 3600
+    project_name = lista_projetos[int(projeto)]
+    horas = calcula_tempo(FILE_TIMES, project_name) / 3600
     os.system('cls')
-    print(f"\n  Você escolheu o projeto: {projectName}\n")
+    print(f"\n  Você escolheu o projeto: {project_name}\n")
     print(f'  O tempo total deste projeto até o momento é de {horas:,.2f} horas.')
     print(f'  O tempo total deste projeto até o momento é de {horas * 60:,.2f} minutos.')
     print(f'  O tempo total deste projeto até o momento é de {horas * 3600:,.2f} segundos.')
     print(f'\n  O valor total de acordo com o custo hora definido para este projeto foi de: R$ '
-          f'{calculaCusto(arq_valores, projectName, horas):,.2f}')
+          f'{calcula_custo(FILE_VALUES, project_name, horas):,.2f}')
     input("\n  Pressione enter para continuar: ")
+    return
 
 
-def main():
+def main() -> None:
     """
         Função principal do programa.
     """
-    opcao = menuInicial()
+    opcao = menu()
 
     if opcao == "1":
-        createProject(arq_projetos)
+        create_project(FILE_PROJECTS)
         main()
 
     elif opcao == "2":
-        newTimeCount()
+        new_time_count()
 
     elif opcao == "3":
-        timeAndCostCalculation()
+        time_and_cost_calculation()
 
     elif opcao.lower() == 'x':
         sys.exit()
+
+    return
 
 
 """
