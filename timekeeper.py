@@ -237,6 +237,6 @@ def main() -> None:
 A seguir, comando para que o programa fique em loop até 
 que a opção de saída seja escolhida pelo usuário.
 """
-opcao = '1'
-while opcao != '0':
+x = 1
+while x:
     main()
